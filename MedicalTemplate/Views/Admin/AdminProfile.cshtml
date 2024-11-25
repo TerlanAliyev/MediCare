@@ -1,0 +1,56 @@
+﻿@{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+
+            <form action="/Admin/AdminProfileEdit/@Model.DrId" method="post">
+                <div class="container rounded bg-white mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-md-3 border-right">
+                            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="/adminWwwroot/img/drprofilephotos/@Model.DrImage"><span class="font-weight-bold">Edogaru</span><span class="text-black-50">edogaru@mail.com.my</span><span> </span></div>
+                        </div>
+                        <div class="col-md-5 border-right">
+                            <div class="p-3 py-5">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="text-right">Profile Settings</h4>
+                                </div>
+                                <div class="row mt-2">
+                                    <div class="col-md-6"><label class="labels">Name</label><input type="text" name="DrName" class="form-control" placeholder="first name" value="@Model.DrName"></div>
+                                    <div class="col-md-6"><label class="labels">Surname</label><input type="text" name="DrLastName" class="form-control" value="@Model.DrLastName" placeholder="surname"></div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-12"><label class="labels">Title</label><input name="DrTitle" type="text" class="form-control" placeholder="Title" value="@Model.DrTitle"></div>
+                                    <div class="col-md-12"><label class="labels">Subtitle</label><input name="DrSubTitle" type="text" class="form-control" placeholder="Subtitle" value="@Model.DrSubTitle"></div>
+                                    <div class="col-md-12"><label class="labels">Context</label><input name="DrContext" type="text" class="form-control" placeholder="Context" value="@Model.DrContext"></div>
+                                    <div class="col-md-12"><label class="labels">Email</label><input name="DrEmail" type="text" class="form-control" placeholder="DrEmail" value="@Model.DrEmail"></div>
+
+                                    <div class="col-md-12"><label class="labels">Mobile Number</label><input name="DrPhoneNumber" type="text" class="form-control" placeholder="enter phone number" value="@Model.DrPhoneNumber"></div>
+
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-12"><label class="labels">City </label><input name="DrCity" type="text" class="form-control" placeholder="City" value="@Model.DrCity"></div>
+                                    <div class="col-md-12"><label class="labels">Address</label><input name="DrAdress" type="text" class="form-control" placeholder="Address" value="@Model.DrAdress"></div>
+
+                                </div>
+                                <button class="btn btn-primary profile-button">Save</button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="p-3 py-5">
+                                <div class="d-flex justify-content-between align-items-center experience"><span>Edit Experience</span><span class="border px-3 p-1 add-experience"><i class="fa fa-plus"></i>&nbsp;Experience</span></div><br>
+                                <div class="col-md-12"><label class="labels">Change Password</label><input type="password" name="DrPassword" class="form-control" placeholder="Password" value="@Model.DrPassword"></div> <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+
+
+    @*  <script>
+    $('#calender').datetimepicker({
+    inline: true,
+    format: 'L'
+    });
+    </script> *@

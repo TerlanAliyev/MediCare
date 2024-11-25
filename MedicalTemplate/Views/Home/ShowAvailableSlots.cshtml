@@ -1,0 +1,44 @@
+﻿@model List<MedicalTemplate.Models.TimeSlot>
+
+<div class="container">
+    <h1 class="my-4 text-center">@ViewData["DoctorName"] - Zaman Dilimlerini Seç</h1>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-warning">
+            @ViewBag.Message
+        </div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var slot in Model)
+            {
+                <div class="col-6 mb-3">
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <h5 class="card-title">Zaman Dilimi</h5>
+                            <p class="card-text">Başlangıç: @slot.StartTime.ToString("HH:mm") - Bitiş: @slot.EndTime.ToString("HH:mm")</p>
+                            <form method="post" action="@Url.Action("BookAppointment", "Home")">
+                                <!-- Gizli inputlar -->
+                                <input type="hidden" name="AppointmentDrId" value="@ViewData["DoctorId"]" />
+                                <input type="hidden" name="AppointmentUserId" value="@ViewBag.UserId" />
+                                <input type="hidden" name="OperationTypeId" value="@ViewBag.OperationTypeId" />
+                                <input type="hidden" name="AppointmentStartTime" value="@slot.StartTime.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                                <input type="hidden" name="AppointmentEndTime" value="@slot.EndTime.ToString("yyyy-MM-ddTHH:mm:ss")" />
+                                <button type="submit" class="btn btn-primary w-100">Randevu Al</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            Bu gün için boş zaman dilimi bulunmamaktadır.
+        </div>
+    }
+</div>

@@ -1,0 +1,212 @@
+﻿@{
+    Layout = "/Views/Shared/_AdminLayout.cshtml";
+    var Appointments = ViewBag.Appointments as List<MedicalTemplate.Models.Appointment>;
+    var AppointmentDate = ViewBag.Appointments as List<MedicalTemplate.Models.Appointment>;
+
+}
+@model DoctorDatum
+
+
+
+<!-- Sale & Revenue Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4 justify-content-around">
+        <div class="col-sm-6 col-xl-3">
+            <a href="/Admin/TodayAppointments">
+                <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <i class="fa fa-chart-area fa-3x text-primary"></i>
+                    <div class="ms-3">
+                        <p class="mb-2">Bugunki qebul olunmus Rezervler</p>
+                        <h6 class="mb-0">
+                            @Appointments.Where(x => x.AppointmentDrId == Model.DrId && x.AppointmentStartTime.HasValue && x.AppointmentStartTime.Value.Date == DateTime.Today).Count()
+                        </h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <a href="/Admin/TotalAppointments">
+                <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                    <i class="fa fa-chart-pie fa-3x text-primary"></i>
+                    <div class="ms-3">
+                        <p class="mb-2">Butun qebul olunmus Rezervler</p>
+                        <h6 class="mb-0"> @Appointments.Where(x => x.AppointmentDrId == Model.DrId).Count()</h6>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
+<!-- Sale & Revenue End -->
+<!-- Sales Chart End -->
+<!-- Recent Sales Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Gözləyən xəstələr</h6>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0" style="overflow:scroll;">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col">SecdiyiTarix</th>
+                        <th scope="col">Ad</th>
+                        <th scope="col">Soyad</th>
+                        <th scope="col">Telefon</th>
+                        <th scope="col">Muracieti</th>
+                        <th scope="col">More</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Appointments != null && Appointments.Any(u => u.AppointmentUser.UserOption == "No" && u.AppointmentUser.UserComplate == "UnComplate"))
+                    {
+                        @foreach (var item in Appointments.Where(u => u.AppointmentUser.UserOption == "No").OrderByDescending(u => u.AppointmentUser.UserPostDate))
+                        {
+                            <tr>
+                                <td>@item.AppointmentStartTime - @item.AppointmentEndTime</td>
+                                <td>@item.AppointmentUser.UserFirstName</td>
+                                <td>@item.AppointmentUser.UserLastName</td>
+                                <td>@item.AppointmentUser.UserPhoneNumber</td>
+                                <td>@item.AppointmentUser.UserOperationType.OpName</td>
+                                <td>
+                                    <a class="btn btn-sm btn-success" href="@Url.Action("UpdateUserOption", "Admin", new { id = item.AppointmentUser.UserId, option = "Yes" })">Yes</a>
+                                    <a class="btn btn-sm btn-danger" href="@Url.Action("UpdateUserOption", "Admin", new { id = item.AppointmentUser.UserId, option = "Yes" })">No</a>
+                                </td>
+                            </tr>
+                        }}
+                    else
+                    {
+                        <tr>
+                            <td colspan="6">
+                                <div class="d-flex justify-content-center align-items-center ">
+                                    <p class="btn btn-sm btn-warning text-center">Tesdiq gozleyen yeni xeste yoxdur</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light text-center rounded p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Təsdiqlənmiş xəstələr</h6>
+        </div>
+        <div class="table-responsive">
+            <table class="table text-start align-middle table-bordered table-hover mb-0" style="overflow:scroll;">
+                <thead>
+                    <tr class="text-dark">
+                        <th scope="col">SecdiyiTarix</th>
+                        <th scope="col">Ad</th>
+                        <th scope="col">Soyad</th>
+                        <th scope="col">Telefon</th>
+                        <th scope="col">Muracieti</th>
+                        <th scope="col">More</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Appointments != null && Appointments.Any(u => u.AppointmentUser.UserOption == "Yes"))
+                    {
+                        @foreach (var item in Appointments.Where(u => u.AppointmentUser.UserOption == "Yes").OrderByDescending(u => u.AppointmentUser.UserPostDate))
+                        {
+                            <tr>
+                                <td>@item.AppointmentStartTime - @item.AppointmentEndTime</td>
+
+                                <td>@item.AppointmentUser.UserFirstName</td>
+                                <td>@item.AppointmentUser.UserLastName</td>
+                                <td>@item.AppointmentUser.UserPhoneNumber</td>
+                                <td>@item.AppointmentUser.UserOperationType.OpName</td>
+                                <td>
+                                    @if (item.AppointmentUser.UserComplate == "UnComplate")
+                                    {
+                                        <a class="btn btn-sm btn-warning" href="@Url.Action("UpdateUserComplate", "Admin", new { id = item.AppointmentUser.UserId, option = "Complate" })">Tamamla</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-sm btn-success">Tamamlandi</a>
+                                    }
+                                </td>
+                            </tr>
+                        }}
+                    else
+                    {
+                        <tr>
+                            <td colspan="6">
+                                <div class="d-flex justify-content-center align-items-center ">
+                                    <p class="btn btn-sm btn-warning text-center">Tesdiqlenmis yeni xeste yoxdur</p>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Recent Sales End -->
+<!-- Widgets Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-12 col-md-6 col-xl-12">
+            <div class="h-100 bg-light rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="mb-0">Messages</h6>
+                    <hr>
+                </div>
+                @foreach (var item in Appointments.OrderByDescending(a => a.AppointmentUser.UserPostDate))
+                {
+                    if (item.AppointmentUser.UserMessage != null)
+                    {
+                    <div class="d-flex align-items-center border-bottom py-3">
+                        <img class="rounded-circle flex-shrink-0" src="img/team-1.jpg" alt="" style="width: 40px; height: 40px;">
+                        <div class="w-100 ms-3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-0">@item.AppointmentUser.UserFirstName @item.AppointmentUser.UserLastName</h6>
+                                @{
+                                    @if (item.AppointmentUser.UserPostDate.HasValue)
+                                    {
+                                        var timeDifference = DateTime.Now.Subtract(item.AppointmentUser.UserPostDate.Value);
+                                        string timeAgo;
+
+                                        if (timeDifference.TotalSeconds < 60)
+                                        {
+                                            timeAgo = $"{(int)timeDifference.TotalSeconds} saniye önce";
+                                        }
+                                        else if (timeDifference.TotalMinutes < 60)
+                                        {
+                                            timeAgo = $"{(int)timeDifference.TotalMinutes} dakika önce";
+                                        }
+                                        else if (timeDifference.TotalHours < 24)
+                                        {
+                                            timeAgo = $"{(int)timeDifference.TotalHours} saat önce";
+                                        }
+                                        else
+                                        {
+                                            timeAgo = $"{(int)timeDifference.TotalDays} gün önce";
+                                        }
+
+                                        <small>@timeAgo</small>
+                                    }
+                                    else
+                                    {
+                                        <small>Veri yok</small>
+                                    }
+
+                                }
+
+
+                            </div>
+                            <span>@item.AppointmentUser.UserMessage</span>
+                        </div>
+                    </div>
+                }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Widgets End -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
