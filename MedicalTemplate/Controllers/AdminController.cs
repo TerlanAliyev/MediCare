@@ -168,7 +168,6 @@ namespace MedicalTemplate.Controllers
         public IActionResult UpdateUserOption(int id, string option)
         {
             
-                    // Kullanıcıyı veritabanından al
                     var user = _sql.Users.FirstOrDefault(u => u.UserId == id);
 
                     if (user == null)
@@ -176,21 +175,17 @@ namespace MedicalTemplate.Controllers
                         return NotFound("Kullanıcı bulunamadı.");
                     }
 
-                    // UserOption değerini güncelle
                     user.UserOption = option;
 
                     if (option == "Yes")
                     {
-                        // Onay e-postası gönder
                         SendConfirmationEmail(user.UserEmail, user.UserFirstName, user.UserLastName);
                     }
                     else if (option == "No")
                     {
-                        // Kullanıcıyı sil
                         _sql.Users.Remove(user);
                     }
 
-                    // Değişiklikleri kaydet
                     _sql.SaveChanges();
 
 
@@ -203,7 +198,6 @@ namespace MedicalTemplate.Controllers
         {
             try
             {
-                // E-posta içeriğini oluştur
                 var message = new MimeMessage();
                 message.From.Add(new MailboxAddress("Klinik", "eliyev91terlan99@gmail.com"));
                 message.To.Add(new MailboxAddress(firstName, email));
@@ -216,8 +210,7 @@ namespace MedicalTemplate.Controllers
 
                 message.Body = builder.ToMessageBody();
 
-                // SMTP istemcisiyle gönderim
-                using var smtp = new MailKit.Net.Smtp.SmtpClient(); // Doğru sınıf adı!
+                using var smtp = new MailKit.Net.Smtp.SmtpClient(); 
                 smtp.Connect("smtp.gmail.com", 465, MailKit.Security.SecureSocketOptions.SslOnConnect);
                 smtp.Authenticate("eliyev91terlan99@gmail.com", "terlantotu96");
                 smtp.Send(message);

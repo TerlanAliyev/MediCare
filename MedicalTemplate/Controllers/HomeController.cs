@@ -22,7 +22,6 @@ namespace MedicalTemplate.Controllers
 
         public IActionResult appointment(int id,int userId)
         {
-            // Kullanýcý ID'sini ViewBag ile View'a gönderiyoruz
             var user = _sql.Users.SingleOrDefault(u => u.UserId == userId);
 
             if (user == null)
@@ -30,11 +29,9 @@ namespace MedicalTemplate.Controllers
                 return NotFound("Kullanýcý bulunamadý.");
             }
 
-            // Kullanýcý ID'si ve diðer bilgileri ViewBag ile gönderiyoruz
-            ViewBag.UserId = user.UserId; // Kullanýcý ID'si
-            ViewBag.Users = _sql.Users.ToList(); // Tüm kullanýcýlarý View'a gönderiyoruz
+            ViewBag.UserId = user.UserId; 
+            ViewBag.Users = _sql.Users.ToList(); 
 
-            // Doktorun randevu zamanlarýný alýyoruz
             var doctorSchedules = _sql.DoctorTimeSchedules
                 .Include(x => x.Dr)
                 .Include(x => x.DrDay)
@@ -136,23 +133,21 @@ namespace MedicalTemplate.Controllers
      DateTime? breakStart = null,
      DateTime? breakEnd = null)
         {
-            var durationInMinutes = operationDuration * 60; // Süreyi dakikaya çeviriyoruz
+            var durationInMinutes = operationDuration * 60;
             var timeSlotStart = startTime;
 
             while (timeSlotStart.AddMinutes(durationInMinutes) <= endTime)
             {
                 var timeSlotEnd = timeSlotStart.AddMinutes(durationInMinutes);
 
-                // Ara zamanlarýný kontrol et
                 if (breakStart.HasValue && breakEnd.HasValue &&
                     ((timeSlotStart >= breakStart && timeSlotStart < breakEnd) ||
                      (timeSlotEnd > breakStart && timeSlotEnd <= breakEnd)))
                 {
-                    timeSlotStart = timeSlotEnd; // Ara zamanýna denk gelen slotlarý atla
+                    timeSlotStart = timeSlotEnd;
                     continue;
                 }
 
-                // Çakýþma kontrolü
                 if (IsTimeSlotAvailable(timeSlotStart, timeSlotEnd, takenAppointments))
                 {
                     availableSlots.Add(new TimeSlot
@@ -174,18 +169,16 @@ namespace MedicalTemplate.Controllers
                 var takenStart = appointment.AppointmentStartTime.Value;
                 var takenEnd = appointment.AppointmentEndTime.Value;
 
-                // Çakýþma kontrolü
                 if (startTime < takenEnd && endTime > takenStart)
                 {
-                    return false; // Çakýþma var
+                    return false; 
                 }
             }
-            return true; // Çakýþma yok
+            return true;
         }
 
 
 
-        // Burada hasta randevusu kaydedecek
         [HttpPost]
         public IActionResult BookAppointment(int AppointmentDrId, int AppointmentUserId, int OperationTypeId, DateTime AppointmentStartTime, DateTime AppointmentEndTime)
         {

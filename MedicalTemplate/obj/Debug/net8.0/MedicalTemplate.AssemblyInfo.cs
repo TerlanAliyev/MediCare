@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MedicalTemplate")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f57d5f84b020592d4a9d43fdec23f8a58b4a67d1")]
 [assembly: System.Reflection.AssemblyProductAttribute("MedicalTemplate")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MedicalTemplate")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
